@@ -1,0 +1,121 @@
+{
+  "manifest_version": 3,
+  "name": "Noob or Forsaken?",
+  "version": "1.12.1",
+  "description": "Steam个人资料页快速查询成分",
+  "icons": {
+    "16": "images/icon-16.png",
+    "48": "images/icon-48.png",
+    "128": "images/icon-128.png"
+  },
+  "permissions": [
+    "activeTab", 
+    "storage",
+    "alarms",
+    "cookies",
+    "scripting",
+    "webRequest",
+    "declarativeNetRequest",
+    "declarativeNetRequestWithHostAccess"
+  ],
+  "options_ui": {
+    "page": "options.html",
+    "open_in_tab": false
+  },
+  "optional_host_permissions": [
+    "http://127.0.0.1/*"
+  ],
+  "host_permissions": [
+    "https://steamcommunity.com/*",
+    "https://api.steampowered.com/*",
+    "https://open.faceit.com/*",
+    "https://open.steamdt.com/*",
+    "https://api.csqaq.com/*",
+    "https://appengine.wmpvp.com/*",
+    "https://api.wmpvp.com/*",
+    "https://pwaweblogin.wmpvp.com/*",
+    "https://partner.wmpvp.com/*",
+    "https://*.5eplay.com/*",
+    "https://*.csstats.gg/*",
+    "https://*.leetify.com/*",
+    "https://api-public.cs-prod.leetify.com/*",
+    "https://*.faceitfinder.com/*",
+    "https://*.faceit.com/*",
+    "https://challenges.cloudflare.com/*",
+    "https://cdn.jsdelivr.net/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+    "content_scripts": [
+      {
+        "matches": [
+          "https://steamcommunity.com/id/*",
+          "https://steamcommunity.com/profiles/*"
+        ],
+        "js": [
+          "qrcode-lite.js",
+          "debug.js",
+          "shared/csstats_url.js",
+          "content/core.js",
+          "content/showcase.js",
+          "content/native.js",
+          "content/pw.js",
+          "content/5e.js",
+          "content/frames.js",
+          "content/main.js"
+        ],
+        "css": ["css/style.css", "css/js_style.css"],
+        "run_at": "document_end"
+      },
+      {
+        "matches": ["https://partner.wmpvp.com/*", "https://pwaweblogin.wmpvp.com/*"],
+        "js": ["content/pw_capture.js"],
+        "run_at": "document_start",
+        "all_frames": true
+      },
+      {
+        "matches": ["https://partner.wmpvp.com/*", "https://pwaweblogin.wmpvp.com/*"],
+        "js": ["content/pw_page_hook.js"],
+        "run_at": "document_start",
+        "world": "MAIN",
+        "all_frames": true
+      },
+      {
+        "matches": ["https://*.5eplay.com/*"],
+        "js": ["content/5e_capture.js"],
+        "run_at": "document_idle",
+        "all_frames": true
+      },
+      {
+        "matches": ["https://*.5eplay.com/*"],
+        "js": ["content/5e_page_hook.js"],
+        "run_at": "document_start",
+        "world": "MAIN",
+        "all_frames": true
+      },
+      {
+        "matches": ["https://*.leetify.com/*"],
+        "js": ["content/leetify_sync.js"],
+        "run_at": "document_start",
+        "all_frames": true
+      },
+      {
+        "matches": ["https://*.csstats.gg/player/*", "https://csstats.gg/player/*"],
+        "js": ["content/csstats_sync.js"],
+        "run_at": "document_start"
+      },
+      {
+        "matches": ["https://*.csstats.gg/*", "https://*.leetify.com/*", "https://*.faceitfinder.com/*", "https://*.faceit.com/*"],
+        "js": ["content/embed_bridge.js"],
+        "run_at": "document_idle",
+        "all_frames": true
+      }
+    ],
+  "web_accessible_resources": [
+    {
+      "resources": ["images/*.svg", "images/*.png", "images/leetify/*.svg", "images/leetify/*.png"],
+      "matches": ["https://steamcommunity.com/*"]
+    }
+  ]
+}
