@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Noob or Forsaken? — 设置</title>
+    <style>
+        *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+        @keyframes bgShift{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
+        @keyframes glowPulse{0%,100%{box-shadow:0 0 20px rgba(102,192,244,0.15)}50%{box-shadow:0 0 35px rgba(102,192,244,0.3)}}
+        @keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+        @keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
+
+        html{width:100%;overflow-y:auto}body{width:100%}
+        body{
+            background: linear-gradient(135deg,#070b10,#0d1520,#0a0f18,#0e1622);
+            background-size:400% 400%;
+            animation:bgShift 20s ease infinite;
+            color:#c8cdd4;
+            font-family:"Motiva Sans","Segoe UI","Arial",sans-serif;
+            font-size:13px;line-height:1.6;
+            min-height:540px;max-width:620px;
+            margin:0 auto;
+            padding:0;
+            user-select:none;
+            overflow-x:clip; 
+            display:flex;flex-direction:column;align-items:center;
+        }
+
+        .page-header{
+            width:100%;
+            background:rgba(10,15,22,0.9);
+            backdrop-filter:blur(20px);
+            -webkit-backdrop-filter:blur(20px);
+            border-bottom:1px solid rgba(102,192,244,0.12);
+            padding:20px 28px;
+            display:flex;align-items:center;justify-content:space-between;
+            position:sticky;top:0;z-index:10; 
+        }
+        .page-header .logo{
+            font-size:18px;font-weight:500;color:#e4e8ee;
+            display:flex;align-items:center;gap:6px;
+        }
+        .page-header .logo span{
+            background:linear-gradient(135deg,#66c0f4,#a855f7);
+            background-clip:text;
+            -webkit-background-clip:text;
+            -webkit-text-fill-color:transparent;
+            font-weight:800;font-size:19px;
+        }
+        .btn-ghost{
+            background:rgba(255,255,255,0.04);
+            color:#8899aa;border:1px solid rgba(255,255,255,0.08);
+            padding:6px 15px;border-radius:20px;cursor:pointer;
+            font-size:11px;font-weight:500;
+            transition:all 0.25s;
+        }
+        .btn-ghost:hover{background:rgba(102,192,244,0.12);color:#66c0f4;border-color:rgba(102,192,244,0.25);}
+        .btn-eye {
+            background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.07);
+            border-radius:6px; cursor:pointer; padding:6px 8px; font-size:13px; line-height:1;
+            transition:background 0.2s; flex-shrink:0;
+        }
+        .btn-eye:hover { background:rgba(255,255,255,0.12); }
+
+        .main-wrap{
+            width:100%;max-width:500px;
+            padding:24px 20px 28px;
+            display:flex;flex-direction:column;align-items:center;
+        }
+
+        .card{
+            width:100%;
+            background:rgba(255,255,255,0.025);
+            border:1px solid rgba(255,255,255,0.06);
+            border-radius:12px;
+            padding:18px 20px;
+            margin-bottom:14px;
+            transition:all 0.3s;
+            animation:fadeUp 0.4s ease;
+            
+            position:relative;overflow:visible;
+        }
+        .card::before{
+            content:'';position:absolute;top:0;left:0;right:0;
+            height:1px;
+            background:linear-gradient(90deg,transparent,rgba(102,192,244,0.3),transparent);
+            opacity:0;transition:opacity 0.3s;
+        }
+        .card:hover::before{opacity:1}
+        .card:hover{border-color:rgba(102,192,244,0.15);background:rgba(102,192,244,0.025);}
+        .card-accent{border-color:rgba(102,192,244,0.15);background:rgba(102,192,244,0.02)}
+        .card-warn{border-color:rgba(255,136,0,0.15);background:rgba(255,136,0,0.02)}
+        .card-accent:hover{border-color:rgba(102,192,244,0.3)}
+        .card-warn:hover{border-color:rgba(255,136,0,0.25)}
+
+        .card-title{
+            font-size:13px;font-weight:600;color:#dce1e8;
+            margin-bottom:14px;padding-bottom:10px;
+            border-bottom:1px solid rgba(255,255,255,0.05);
+            display:flex;align-items:center;gap:8px;
+        }
+        .pill{
+            font-size:9px;padding:3px 9px;border-radius:20px;
+            font-weight:700;text-transform:uppercase;letter-spacing:0.6px;
+        }
+        .pill-rec{background:rgba(102,192,244,0.2);color:#66c0f4}
+        .pill-bak{background:rgba(255,255,255,0.06);color:#8899aa}
+        .pill-key{background:rgba(255,136,0,0.2);color:#ff8800}
+
+        .row{
+            display:flex;align-items:center;justify-content:space-between;
+            gap:14px;margin-bottom:10px;
+        }
+        .row:last-child{margin-bottom:0}
+        .row-label{flex:0 0 auto;color:#8899aa;font-size:12px;min-width:72px}
+        .row-input{flex:1}
+
+        select,input[type="text"],input[type="password"]{
+            width:100%;padding:8px 12px;
+            background:rgba(255,255,255,0.04);color:#dce1e8;
+            border:1px solid rgba(255,255,255,0.07);border-radius:8px;
+            font-family:inherit;font-size:12px;outline:none;
+            transition:all 0.25s;
+        }        select option {
+            background: #1a2230; color: #dce1e8;
+        }        select:focus,input[type="text"]:focus,input[type="password"]:focus{
+            border-color:rgba(102,192,244,0.5);background:rgba(102,192,244,0.04);
+            box-shadow:0 0 12px rgba(102,192,244,0.1);
+        }
+        select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%238899aa'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:32px}
+
+        input[type="range"]{
+            appearance:none;
+            -webkit-appearance:none;width:100%;height:6px;
+            background:rgba(255,255,255,0.06);border-radius:3px;outline:none;
+        }
+        input[type="range"]::-webkit-slider-thumb{
+            appearance:none;
+            -webkit-appearance:none;width:18px;height:18px;
+            border-radius:50%;background:#66c0f4;
+            border:2px solid rgba(0,0,0,0.3);
+            cursor:pointer;box-shadow:0 0 10px rgba(102,192,244,0.4);
+            transition:box-shadow 0.2s;
+        }
+        input[type="range"]::-webkit-slider-thumb:hover{box-shadow:0 0 18px rgba(102,192,244,0.6)}
+
+        input[type="checkbox"]{transform:scale(1.15);accent-color:#66c0f4;cursor:pointer}
+        .chk-row{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+        .chk-row label{color:#8899aa;cursor:pointer;font-size:12px}
+
+        .radio-inline{
+            display:inline-flex;align-items:center;gap:6px;
+            margin-right:22px;color:#8899aa;cursor:pointer;font-size:12px;
+        }
+        .radio-inline input[type="radio"]{accent-color:#66c0f4;cursor:pointer}
+
+        .val-badge{
+            color:#66c0f4;font-weight:700;font-size:12px;min-width:38px;text-align:right;
+            text-shadow:0 0 8px rgba(102,192,244,0.3);
+        }
+
+        .hint{
+            font-size:10px;color:#5a6675;margin-top:5px;line-height:1.5;
+        }
+        .hint a{color:#66c0f4;text-decoration:none;border-bottom:1px dotted transparent;transition:border-color 0.2s}
+        .hint a:hover{border-bottom-color:#66c0f4}
+        
+        .otip{
+            position:relative;display:inline-flex;align-items:center;justify-content:center;
+            width:13px;height:13px;margin-left:5px;border-radius:50%;
+            font-size:9px;line-height:1;font-weight:700;font-style:normal;
+            color:#9fd0f5;background:linear-gradient(135deg,rgba(102,192,244,0.26),rgba(168,85,247,0.22));
+            border:1px solid rgba(102,192,244,0.38);
+            cursor:help;vertical-align:middle;flex-shrink:0;user-select:none;
+            transition:color .18s, box-shadow .18s, border-color .18s;
+        }
+        .otip:hover,.otip:focus-visible{
+            color:#fff;border-color:rgba(102,192,244,0.85);outline:none;
+            box-shadow:0 0 0 2px rgba(102,192,244,0.16), 0 0 10px rgba(102,192,244,0.55);
+        }
+        .otip::after{
+            content:attr(data-tip);
+            position:absolute;left:-5px;bottom:calc(100% + 9px);z-index:40;
+            width:max-content;max-width:240px;padding:7px 10px;
+            font-size:11px;font-weight:400;line-height:1.65;letter-spacing:0.2px;
+            color:#c6d2e2;text-align:left;white-space:normal;
+            background:linear-gradient(180deg,rgba(26,36,50,0.99),rgba(11,16,24,0.985));
+            border:1px solid rgba(102,192,244,0.24);border-left:2px solid #66c0f4;
+            border-radius:2px 9px 9px 2px;
+            box-shadow:0 16px 36px rgba(0,0,0,0.62), inset 0 1px 0 rgba(255,255,255,0.04);
+            opacity:0;transform:translateY(5px);pointer-events:none;
+            transition:opacity .16s ease, transform .16s ease;
+        }
+        .otip::before{
+            content:'';position:absolute;left:2px;bottom:calc(100% + 4px);z-index:41;
+            width:9px;height:9px;transform:rotate(45deg);
+            background:rgba(20,28,40,0.985);
+            border-left:2px solid #66c0f4;border-bottom:1px solid rgba(102,192,244,0.24);
+            opacity:0;pointer-events:none;transition:opacity .16s ease;
+        }
+        .otip:hover::after,.otip:focus-visible::after{opacity:1;transform:translateY(0)}
+        .otip:hover::before,.otip:focus-visible::before{opacity:1}
+        @media (prefers-reduced-motion: reduce){
+            .otip::after{transform:none;transition:opacity .01s}
+            .otip:hover::after,.otip:focus-visible::after{transform:none}
+        }
+        .row-label a{color:#66c0f4;text-decoration:none;border-bottom:1px dotted transparent}
+        .row-label a:hover{border-bottom-color:#66c0f4}
+
+        .sub-panel{
+            display:none;margin-top:16px;padding-top:16px;
+            border-top:1px dashed rgba(255,255,255,0.05);
+            animation:fadeUp 0.3s ease;
+        }
+
+        .btn-primary{
+            width:100%;padding:12px;
+            background:linear-gradient(135deg,#66c0f4 0%,#4a90d9 50%,#3d7ec0 100%);
+            color:#fff;border:none;border-radius:10px;
+            cursor:pointer;font-size:14px;font-weight:600;
+            letter-spacing:0.4px;
+            position:relative;overflow:hidden;
+            transition:all 0.3s;
+            box-shadow:0 4px 20px rgba(102,192,244,0.25);
+            margin-top:8px;
+        }
+        .btn-primary:hover{
+            box-shadow:0 6px 30px rgba(102,192,244,0.4);
+            transform:translateY(-1px);
+        }
+        .btn-primary:active{transform:scale(0.97)}
+        .btn-primary::after{
+            content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;
+            background:linear-gradient(90deg,transparent,rgba(255,255,255,0.1),transparent);
+            transition:left 0.5s;
+        }
+        .btn-primary:hover::after{left:100%}
+
+        .btn-bind{
+            background:rgba(102,192,244,0.07);color:#66c0f4;
+            border:1px solid rgba(102,192,244,0.15);padding:7px 16px;
+            border-radius:8px;cursor:pointer;font-size:11px;width:100%;
+            margin-top:12px;transition:all 0.25s;
+        }
+        .btn-bind:hover{background:rgba(102,192,244,0.14);color:#fff;border-color:rgba(102,192,244,0.35)}
+        .btn-bind:disabled{opacity:0.45;cursor:not-allowed}
+
+        #status{
+            margin-top:12px;text-align:center;color:#a3cf06;
+            font-weight:500;font-size:12px;min-height:20px;
+            transition:all 0.3s;
+        }
+        #status a{color:#66c0f4}
+
+        .divider{border:none;border-top:1px solid rgba(255,255,255,0.03);margin:12px 0}
+
+        .f5e-login-window{
+            position:fixed;z-index:99999;width:min(440px,92vw);height:min(560px,86vh);
+            display:flex;flex-direction:column;overflow:hidden;
+            background:rgba(14,20,30,0.97);
+            border:1px solid rgba(102,192,244,0.25);border-radius:10px;
+            box-shadow:0 16px 48px rgba(0,0,0,0.65);
+            animation:fadeUp 0.22s ease;user-select:none;
+        }
+        .f5e-login-head{
+            display:flex;align-items:center;justify-content:space-between;gap:8px;
+            padding:0 10px;height:36px;flex-shrink:0;cursor:grab;
+            background:linear-gradient(90deg, rgba(102,192,244,0.12), rgba(102,192,244,0.03));
+            border-bottom:1px solid rgba(255,255,255,0.06);
+        }
+        .f5e-login-head:active{cursor:grabbing}
+        .f5e-login-title{font-size:12px;font-weight:700;color:#e9ebee;letter-spacing:0.3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+        .f5e-login-head-btns{display:flex;align-items:center;gap:2px;flex-shrink:0}
+        .f5e-login-ctrl{
+            background:none;border:none;color:#8899aa;font-size:12px;font-weight:600;
+            cursor:pointer;padding:4px 8px;border-radius:5px;line-height:1;
+            font-family:inherit;text-decoration:none;
+            transition:color 0.15s, background 0.15s;
+        }
+        .f5e-login-ctrl:hover{color:#fff;background:rgba(255,255,255,0.08)}
+        .f5e-login-grab{color:#66c0f4}
+        .f5e-login-grab:hover{color:#fff;background:rgba(102,192,244,0.25)}
+        .f5e-login-body{position:relative;flex:1;overflow:hidden;background:rgba(255,255,255,0.02)}
+        .f5e-login-loader{
+            position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+            color:#8899aa;font-size:13px;z-index:3;pointer-events:none;
+        }
+        .f5e-login-foot{
+            flex-shrink:0;padding:8px 12px;font-size:10px;line-height:1.6;color:#5a6675;
+            border-top:1px solid rgba(255,255,255,0.06);background:rgba(10,15,22,0.9);
+        }
+        .f5e-login-foot-ok{color:#4caf50}
+        .f5e-login-foot-warn{color:#ff9800}
+
+        ::-webkit-scrollbar{width:4px}
+        ::-webkit-scrollbar-track{background:transparent}
+        ::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.08);border-radius:2px}
+        ::-webkit-scrollbar-thumb:hover{background:rgba(255,255,255,0.15)}
+    </style>
+</head>
+<body>
+    <div class="page-header">
+        <div class="logo">Noob or <span>Forsaken?</span></div>
+        <button id="clear_cache" class="btn-ghost">🧹 清除缓存</button>
+        <button id="export_diagnostics" class="btn-ghost" style="margin-left:4px;">🐞 诊断包</button>
+        
+    </div>
+
+    <div class="main-wrap">
+        
+        <div class="search-wrap" style="width:100%;margin-bottom:14px;position:relative;">
+            <input type="text" id="settings_search" placeholder="🔍 搜索设置项（如：缓存、Key、货币、赛季）..."
+                   style="width:100%;padding:10px 14px;border-radius:20px;border:1px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.05);color:#e4e8ee;font-size:13px;outline:none;transition:border-color 0.2s;user-select:text;">
+            <style>@media (prefers-reduced-motion: no-preference) { #settings_search:focus { border-color: rgba(102,192,244,0.5) !important; box-shadow: 0 0 0 2px rgba(102,192,244,0.12); } }</style>
+            <button type="button" id="search_clear" style="display:none;position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;color:#8899aa;cursor:pointer;font-size:14px;">✕</button>
+        </div>
+
+        <div class="card">
+            <div class="card-title">基础设置</div>
+            <div class="chk-row">
+                <input type="checkbox" id="enable_plugin">
+                <label for="enable_plugin">启用插件</label>
+            </div>
+            <div class="row">
+                <span class="row-label">界面语言</span>
+                <div class="row-input">
+                    <select id="language">
+                        <option value="zh">中文</option>
+                        <option value="en">English</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row">
+                <span class="row-label">详情提示<span class="otip" data-tip="无悬停的浏览器（如 Steam 叠加菜单）请选「点击显示」：点标识就地弹出详情小窗" tabindex="0" aria-label="说明：无悬停的浏览器（如 Steam 叠加菜单）请选「点击显示」：点标识就地弹出详情小窗">ⓘ</span></span>
+                <div class="row-input">
+                    <select id="hover_mode">
+                        <option value="hover">悬停显示（默认）</option>
+                        <option value="click">点击显示（点击标识查看详情）</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row" style="margin-bottom:0;">
+                <div class="row-input" style="display:flex;gap:8px;">
+                    <button type="button" id="export_settings" class="btn-bind" style="margin-top:0;flex:1;">导出全部设置</button>
+                    <button type="button" id="import_settings" class="btn-bind" style="margin-top:0;flex:1;">导入全部设置</button>
+                    <input type="file" id="settings_file_input" accept=".json" style="display:none;">
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-title">外观与布局</div>
+            <div class="row">
+                <span class="row-label">显示模式</span>
+                <div class="row-input">
+                    <select id="ui_mode">
+                        <option value="showcase">展柜模式</option>
+                        <option value="split">分体模式</option>
+                        <option value="native">原生模式</option>
+                    </select>
+                </div>
+            </div>
+            <div id="appearance_rows">
+            <div class="row">
+                <span class="row-label">整体缩放</span>
+                <span id="val_scale" class="val-badge">100%</span>
+                <div class="row-input"><input type="range" id="scale" min="0.7" max="1.3" step="0.05"></div>
+            </div>
+            <div class="row">
+                <span class="row-label">背景透明</span>
+                <span id="val_bg_opacity" class="val-badge">95%</span>
+                <div class="row-input"><input type="range" id="bg_opacity" min="0.2" max="1.0" step="0.05" disabled></div>
+            </div>
+            <div class="hint" id="bg_opacity_hint">容器风格为「自动适配」时不可调整，请先切换为其他风格</div>
+            <hr class="divider">
+            <div class="chk-row">
+                <input type="checkbox" id="high_contrast">
+                <label for="high_contrast" style="color:#ff8800;">文字高对比度</label><span class="otip" data-tip="浅色主题下开启可保证文字清晰" tabindex="0" aria-label="说明：浅色主题下开启可保证文字清晰">ⓘ</span>
+            </div>
+            <div class="hint" id="native_mode_hint" style="display:none;">原生模式：完全使用 Steam 原生 CSS，上方外观选项不生效（仅展柜/分体模式需要）</div>
+            <div id="split_close_panel" class="sub-panel">
+                <div class="row">
+                    <span class="row-label">关闭方式<span class="otip" data-tip="分体模式下点击菜单外的区域自动关闭" tabindex="0" aria-label="说明：分体模式下点击菜单外的区域自动关闭">ⓘ</span></span>
+                    <div class="row-input">
+                        <select id="split_close_mode">
+                            <option value="outside">点击外部关闭</option>
+                            <option value="toggle">点击按钮切换</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <hr class="divider">
+            <div class="row" style="margin-top:8px;">
+                <span class="row-label">容器风格</span>
+                <div class="row-input">
+                    <select id="container_style">
+                        <option value="auto">自动适配</option>
+                        <option value="glass">毛玻璃</option>
+                        <option value="solid">纯黑实色</option>
+                        <option value="compact">紧凑模式</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row">
+                <span class="row-label">边角样式</span>
+                <div class="row-input">
+                    <select id="corner_style">
+                        <option value="rounded">圆角</option>
+                        <option value="sharp">直角</option>
+                    </select>
+                </div>
+            </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-title">快捷工具</div>
+            <div class="chk-row"><input type="checkbox" id="show_csstats"><label for="show_csstats">CSStats 数据卡 / 按钮</label></div>
+            <div class="chk-row"><input type="checkbox" id="show_leetify"><label for="show_leetify">Leetify 数据卡 / 按钮</label></div>
+            <div class="row">
+                <span class="row-label">浮窗模式<span class="otip" data-tip="CSStats / Leetify 在页面内浮窗打开；CSStats 因 Cloudflare 禁止内嵌，改在独立小窗打开（再点一次聚焦已开那块）" tabindex="0" aria-label="说明：CSStats / Leetify 在页面内浮窗打开；CSStats 因 Cloudflare 禁止内嵌，改在独立小窗打开，再点一次会聚焦已开的那块">ⓘ</span></span>
+                <div class="row-input">
+                    <select id="frame_mode">
+                        <option value="pip">画中画浮动</option>
+                        <option value="modal">背景黑幕</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="row">
+                <span class="row-label">CSStats 承载<span class="otip" data-tip="默认页面内浮窗。注意：CSStats 对 iframe 恒定人机验证，帧里多半只看到验证页；要看数据就切「后台标签页」或「独立小窗」" tabindex="0" aria-label="说明：默认页面内浮窗。注意 CSStats 对 iframe 恒定人机验证，帧里多半只看到验证页；要看数据就切后台标签页或独立小窗">ⓘ</span></span>
+                <div class="row-input">
+                    <select id="csstats_carrier">
+                        <option value="frame">页面内浮窗（iframe）</option>
+                        <option value="tab">后台标签页（最不打扰）</option>
+                        <option value="window">独立小窗</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="row">
+                <span class="row-label">CSStats 取数方式<span class="otip" data-tip="自动：先直连，拿到的只有段位（缺详表）时，用一个不抢焦点的后台标签页补全，补完自动关闭；仅直连：永不开标签页，缺的数据就空着；仅标签页：跳过注定失败的统计页直连，只花 3 秒试一下主页拿段位，详表交给后台标签页" tabindex="0" aria-label="说明：自动会先直连，缺详表时用后台标签页补全并自动关闭；仅直连永不开标签页；仅标签页跳过统计页直连，只用后台标签页补详表">ⓘ</span></span>
+                <div class="row-input">
+                    <select id="csstats_fetch">
+                        <option value="auto">自动（推荐）</option>
+                        <option value="direct">仅直连</option>
+                        <option value="tab">仅标签页</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="row">
+                <span class="row-label">Steam 客户端补全<span class="otip" data-tip="仅在 Steam 客户端生效。自动：桌面客户端小窗不抢焦点补全、游戏内绝不弹窗切屏；只用可见承载：普通弹窗补全；关：不自动补全" tabindex="0" aria-label="说明：仅在 Steam 客户端生效。自动在桌面客户端小窗不抢焦点补全、游戏内绝不弹窗；只用可见承载弹小窗补全；关则不补全">ⓘ</span></span>
+                <div class="row-input">
+                    <select id="csstats_cef">
+                        <option value="auto">自动（推荐）</option>
+                        <option value="visible">只用可见承载</option>
+                        <option value="off">关</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="row">
+                <span class="row-label">本地调试端口<span class="otip" data-tip="开了 Steam 的调试端口（-cef-enable-debugging）并授权后，补全可以完全不可见地完成。注意：调试端口等于把浏览器控制权交给本机任何进程，不需要就别授权" tabindex="0" aria-label="说明：开了 Steam 调试端口并授权后补全可完全不可见；但调试端口等于把浏览器控制权交给本机任何进程，不需要就别授权">ⓘ</span></span>
+                <div class="row-input">
+                    <button type="button" id="csstats_cdp_grant" class="btn-ghost">授权 127.0.0.1</button>
+                </div>
+            </div>
+
+            <div class="chk-row">
+                <input type="checkbox" id="window_nofocus" checked>
+                <label for="window_nofocus">小窗打开时不抢焦点</label><span class="otip" data-tip="避免游戏全屏时被切出去：小窗不夺取前台，页面右下角出现胶囊，点它才切过去；关掉则新窗口直接置前" tabindex="0" aria-label="说明：避免游戏全屏时被切出去，小窗不夺取前台，页面右下角出现胶囊，点它才切过去；关掉则新窗口直接置前">ⓘ</span>
+            </div>
+            <div class="chk-row">
+                <input type="checkbox" id="frame_auto_tab" checked>
+                <label for="frame_auto_tab">被 Cloudflare 拦时自动开标签页</label><span class="otip" data-tip="内嵌页被人机验证拦住时，自动在标签页打开同一地址（同一地址 60 秒内只开一次）。验证完切回来会自动重载；不想要这种自动跳转就关掉" tabindex="0" aria-label="说明：内嵌页被人机验证拦住时自动在标签页打开同一地址，同一地址 60 秒内只开一次；关掉则只显示提示">ⓘ</span>
+            </div>
+            <div class="row">
+                <span class="row-label">浮窗透明<span class="otip" data-tip="仅调节完美/5E 浮窗背景透明度；不影响分体模式自动适配，三种模式下都生效" tabindex="0" aria-label="说明：仅调节完美/5E 浮窗背景透明度；不影响分体模式自动适配，三种模式下都生效">ⓘ</span></span>
+                <span id="val_modal_opacity" class="val-badge">85%</span>
+                <div class="row-input"><input type="range" id="modal_opacity" min="0.2" max="1.0" step="0.05"></div>
+            </div>
+            <hr class="divider">
+            <div class="chk-row">
+                <input type="checkbox" id="show_topitems" checked>
+                <label for="show_topitems">库存高价值物品</label><span class="otip" data-tip="展示价值最高的物品：默认 6 件，估值达「高价值阈值」时 12 件；展柜/分体下点库存数量可展开收起" tabindex="0" aria-label="说明：展示价值最高的物品：默认 6 件，估值达「高价值阈值」时 12 件；展柜/分体下点库存数量可展开收起">ⓘ</span>
+            </div>
+            
+            <div class="chk-row">
+                <input type="checkbox" id="show_phase" checked>
+                <label for="show_phase">多普勒系列Phase值检测</label>
+            </div>
+        </div>
+
+        <div class="card card-warn">
+            <div class="card-title">Faceit 数据 <span class="pill pill-key">Key</span></div>
+            <div class="row">
+                <span class="row-label">API Key <a href="https://developers.faceit.com" target="_blank" rel="noopener">申请</a></span>
+                <div class="row-input" style="display:flex;align-items:center;gap:6px;"><input type="password" id="faceit_key" placeholder="粘贴 Server API Key..." style="flex:1;"><button type="button" id="eye_faceit_key" class="btn-eye">👁️</button></div>
+            </div>
+        </div>
+
+        <div class="card card-warn">
+            <div class="card-title">Leetify 数据 <span class="pill pill-key">增加限额</span></div>
+            <div class="row">
+                <span class="row-label">API Key <a href="https://leetify.com/app/developer" target="_blank" rel="noopener">申请</a></span>
+                <div class="row-input" style="display:flex;align-items:center;gap:6px;"><input type="password" id="leetify_key" placeholder="粘贴 Leetify API Key..." style="flex:1;"><button type="button" id="eye_leetify_key" class="btn-eye">👁️</button></div>
+            </div>
+        </div>
+
+        <div class="card card-accent" style="animation:glowPulse 3s ease-in-out infinite">
+            <div class="card-title">库存估值</div>
+            <div class="row">
+                <span class="row-label">数据来源</span>
+                <div class="row-input">
+                    <select id="inv_source">
+                        <option value="steam">仅数量统计（无估值）</option>
+                        <option value="steam_mkt">🛒 Steam 市场 — 免 Key</option>
+                        <option value="csqaq">⚡ CSQAQ — 推荐</option>
+                        <option value="steamdt">🔧 SteamDT — 备用</option>
+                    </select>
+                    <div class="hint" id="steam_mkt_hint" style="display:none;margin-top:6px;">免 Key：Steam 市场中位价（CNY），无挂单时回退求购价</div>
+                </div>
+            </div>
+
+            <div id="csqaq_config" class="sub-panel">
+                <div class="card-title" style="font-size:12px;margin-bottom:10px">
+                    🟢 CSQAQ <span class="pill pill-rec">推荐</span>
+                </div>
+                <div class="row">
+                    <span class="row-label">Token <a href="https://csqaq.com" target="_blank" rel="noopener">申请</a></span>
+                    <div class="row-input" style="display:flex;align-items:center;gap:6px;"><input type="password" id="csqaq_key" placeholder="粘贴 ApiToken..." style="flex:1;"><button type="button" id="eye_csqaq_key" class="btn-eye">👁️</button></div>
+                </div>
+                <div class="row" style="align-items:flex-start">
+                    <span class="row-label">价格平台</span>
+                    <div class="row-input">
+                        <label class="radio-inline"><input type="radio" name="csqaq_plat" value="1" checked> BUFF</label>
+                        <label class="radio-inline"><input type="radio" name="csqaq_plat" value="2"> UUYP</label>
+                    </div>
+                </div>
+                <button type="button" id="bind_csqaq_ip" class="btn-bind">绑定当前 IP 白名单</button>
+                <hr class="divider">
+                <div class="chk-row">
+                    <input type="checkbox" id="auto_bind_csqaq" checked>
+                    <label for="auto_bind_csqaq">自动绑定 IP</label>
+                </div>
+                <div class="row" style="margin-bottom:0;">
+                    <span class="row-label">间隔(分)</span>
+                    <div class="row-input" style="display:flex;align-items:center;gap:8px;">
+                        <input type="range" id="csqaq_bind_interval" min="5" max="120" step="5" value="30" style="flex:1;">
+                        <span id="val_csqaq_bind_interval" class="val-badge" style="min-width:32px;">30分</span>
+                    </div>
+                </div>
+                <div class="chk-row" style="margin-top:4px;">
+                    <input type="checkbox" id="csqaq_accel">
+                    <label for="csqaq_accel">检测IP变化</label><span class="otip" data-tip="加载资料时检测 IP 是否变更，变化则自动重新绑定" tabindex="0" aria-label="说明：加载资料时检测 IP 是否变更，变化则自动重新绑定">ⓘ</span>
+                </div>
+            </div>
+
+            <div id="steamdt_config" class="sub-panel">
+                <div class="card-title" style="font-size:12px;margin-bottom:10px">
+                    🟡 SteamDT <span class="pill pill-bak">备用</span><span class="otip" data-tip="接口限制：每分钟最多 100 次查询，物品多的库存会轮询多次、较慢" tabindex="0" aria-label="说明：接口限制：每分钟最多 100 次查询，物品多的库存会轮询多次、较慢">ⓘ</span>
+                </div>
+                <div class="row">
+                    <span class="row-label">API Key <a href="https://steamdt.com" target="_blank" rel="noopener">申请</a></span>
+                    <div class="row-input" style="display:flex;align-items:center;gap:6px;"><input type="password" id="steamdt_key" placeholder="粘贴 API Key..." style="flex:1;"><button type="button" id="eye_steamdt_key" class="btn-eye">👁️</button></div>
+                </div>
+                <div class="row" style="align-items:flex-start">
+                    <span class="row-label">价格平台</span>
+                    <div class="row-input" style="display:flex;flex-wrap:wrap;gap:4px 18px;">
+                        <label class="radio-inline"><input type="radio" name="steamdt_plat" value="buff" checked> BUFF</label>
+                        <label class="radio-inline"><input type="radio" name="steamdt_plat" value="uuyp"> UUYP</label>
+                        <label class="radio-inline"><input type="radio" name="steamdt_plat" value="igxe"> IGXE</label>
+                        <label class="radio-inline"><input type="radio" name="steamdt_plat" value="c5"> C5</label>
+                        <label class="radio-inline"><input type="radio" name="steamdt_plat" value="steam"> Steam</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <span class="row-label">浮动区间数据源</span>
+                    <div class="row-input">
+                        <select id="float_source">
+                            <option value="bymykel">ByMykel 数据（默认）</option>
+                            <option value="steamdt">SteamDT 数据（测试）</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="hint" id="float_source_hint" style="display:none;">实验性：改用 SteamDT 名录（每日 1 次配额）；接口失败自动回退 ByMykel</div>
+            </div>
+
+            <div class="row">
+                <span class="row-label">货币单位<span class="otip" data-tip="仅 Steam 市场按所选货币查价；CSQAQ / SteamDT 平台价格恒为人民币" tabindex="0" aria-label="说明：仅 Steam 市场按所选货币查价；CSQAQ / SteamDT 平台价格恒为人民币">ⓘ</span></span>
+                <div class="row-input">
+                    <select id="currency">
+                        <option value="CNY">人民币 ¥</option>
+                        <option value="USD">美元 $</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row">
+                <span class="row-label">跳转渠道<span class="otip" data-tip="点击高价值物品/配件打开的详情页渠道；CSQAQ 需商品编号，无编号自动回退 Steam 市场页；「跟随估值来源」与「数据来源」一致" tabindex="0" aria-label="说明：点击高价值物品/配件打开的详情页渠道；CSQAQ 需商品编号，无编号自动回退 Steam 市场页；「跟随估值来源」与「数据来源」一致">ⓘ</span></span>
+                <div class="row-input">
+                    <select id="link_source">
+                        <option value="auto">跟随估值来源（默认）</option>
+                        <option value="csqaq">CSQAQ</option>
+                        <option value="steamdt">SteamDT</option>
+                        <option value="steam_mkt">Steam 市场</option>
+                    </select>
+                </div>
+            </div>
+            <hr class="divider">
+            <div class="chk-row">
+                <input type="checkbox" id="sticker_steam_fallback" checked>
+                <label for="sticker_steam_fallback">配件估价 Steam 兑底</label><span class="otip" data-tip="主渠道缺价时用 Steam 市场二次查询（建议开启）：贴纸/挂件/印花板按 Steam 在售价补价" tabindex="0" aria-label="说明：主渠道缺价时用 Steam 市场二次查询（建议开启）：贴纸/挂件/印花板按 Steam 在售价补价">ⓘ</span>
+            </div>
+
+            <hr class="divider">
+            <div class="row">
+                <span class="row-label">高价值阈值<span class="otip" data-tip="库存估值达到该阈值（¥）时高价值物品区显示 12 件（两行 ×6），否则 6 件；设为 0 ＝ 估值有效时总是 12 件" tabindex="0" aria-label="说明：库存估值达到该阈值（¥）时高价值物品区显示 12 件（两行 ×6），否则 6 件；设为 0 ＝ 估值有效时总是 12 件">ⓘ</span></span>
+                <span id="val_top12_threshold" class="val-badge">1万</span>
+                <div class="row-input"><input type="range" id="top12_threshold" min="0" max="50000" step="1000" value="10000"></div>
+            </div>
+            <hr class="divider">
+            <div class="row">
+                <span class="row-label">市场查价上限<span class="otip" data-tip="Steam 市场来源单次估值最多查价的物品名数量（按价值潜力取前 N，防 429 限流；上限 50 —— 共享出口 IP 下超量查价极易进黑名单）" tabindex="0" aria-label="说明：Steam 市场来源单次估值最多查价的物品名数量（按价值潜力取前 N，防 429 限流；上限 50 —— 共享出口 IP 下超量查价极易进黑名单）">ⓘ</span></span>
+                <span id="val_mkt_query_limit" class="val-badge">50个</span>
+                <div class="row-input"><input type="range" id="mkt_query_limit" min="10" max="50" step="5" value="50"></div>
+            </div>
+        </div>
+
+        <div class="card card-accent">
+            <div class="card-title">完美世界 <span class="pill pill-rec">可选</span></div>
+            <div class="chk-row">
+                <input type="checkbox" id="show_pw">
+                <label for="show_pw">启用完美世界查成分</label>
+            </div>
+            <hr class="divider">
+            <div class="row">
+                <span class="row-label">当前赛季数<span class="otip" data-tip="完美基础赛季范围（S1 ~ 该值）；生涯全空的玩家按该值当当前赛季。平台开新赛季后探测不准可手动校准" tabindex="0" aria-label="说明：完美基础赛季范围（S1 ~ 该值）；生涯全空的玩家按该值当当前赛季。平台开新赛季后探测不准可手动校准">ⓘ</span></span>
+                <span id="val_pw_base_seasons" class="val-badge">S25</span>
+                <div class="row-input"><input type="range" id="pw_base_seasons" min="20" max="60" step="1" value="25"></div>
+            </div>
+            <hr class="divider">
+            <div class="chk-row">
+                <input type="checkbox" id="pw_search">
+                <label for="pw_search">启用昵称搜索</label><span class="otip" data-tip="在完美弹窗内按昵称搜索玩家" tabindex="0" aria-label="说明：在完美弹窗内按昵称搜索玩家">ⓘ</span>
+            </div>
+            <hr class="divider">
+            <div class="chk-row">
+                <input type="checkbox" id="pw_detail">
+                <label for="pw_detail">比赛记录明细（进阶）</label>
+            </div>
+            <div class="row" style="align-items:center;">
+                <span class="row-label">账号登录（可选）<span class="otip" data-tip="点「完美Steam登录获取」在设置页内打开完美登录页，在窗里点「STEAM账号登录」；成功后 token 自动获取、仅存本地。窗里一片空白=Steam 侧要重新登录且不接受内嵌，点窗标题栏 ⤴ 整页打开。不想登录也可在下方粘贴 token。" tabindex="0" aria-label="说明：点「完美Steam登录获取」在设置页内打开完美登录页，在窗里点「STEAM账号登录」；成功后 token 自动获取、仅存本地。窗里一片空白=Steam 侧要重新登录且不接受内嵌，点窗标题栏 ⤴ 整页打开。不想登录也可在下方粘贴 token。">ⓘ</span></span>
+                <div class="row-input" style="display:flex;gap:6px;align-items:center;">
+                    <button type="button" class="btn-ghost" id="pw-login-btn">完美Steam登录获取</button>
+                    <button type="button" class="btn-ghost" id="pw-logout-btn">清除凭证</button>
+                </div>
+            </div>
+            <div class="hint" id="pw-login-status">⭕ 未获取</div>
+            <hr class="divider">
+            <div class="row" style="align-items:center;">
+                <span class="row-label">登录凭据<span class="otip" id="pw_token_hint" data-tip="填了 登录凭据与其账号的64位ID 后，「比赛详情」里可拿本场 demo 直链：左键＝复制，Ctrl+左键＝浏览器打开（解析平台 302 得 OSS 自签名地址，每场每 24 小时至多一次）；签名算法或字段一变即整体失效。" tabindex="0" aria-label="说明：填了 token + 本人 SteamID 后，「比赛详情」里可拿本场 demo 直链：左键＝复制，Ctrl+左键＝浏览器打开（解析平台 302 得 OSS 自签名地址，每场每 24 小时至多一次）；签名算法或字段一变即整体失效。">ⓘ</span></span>
+                <div class="row-input" style="display:flex;align-items:center;gap:6px;"><input type="password" id="pw_token" placeholder="登录自动获取，或粘贴 token..." style="flex:1;"><button type="button" id="eye_pw_token" class="btn-eye">👁️</button></div>
+            </div>
+            <div class="row" style="align-items:center;">
+                <span class="row-label">凭据账号 SteamID</span>
+                <div class="row-input"><input type="text" id="pw_mysteamid" placeholder="64 位 SteamID（须与 token 同账号）"></div>
+            </div>
+            <div class="row" style="align-items:center;">
+                <span class="row-label">凭证<span class="otip" data-tip="点上方「完美Steam登录获取」即可自动取得（推荐）；也可手动粘贴 token。无论哪种，SteamID 都填与 token 同账号的那个。" tabindex="0" aria-label="说明：点上方「完美Steam登录获取」即可自动取得（推荐）；也可手动粘贴 token。无论哪种，SteamID 都填与 token 同账号的那个。">ⓘ</span></span>
+                <div class="row-input" style="display:flex;gap:6px;align-items:center;">
+                    <button type="button" class="btn-ghost" id="pw-verify-btn">验证有效性</button>
+                </div>
+            </div>
+            <div class="hint" id="pw-verify-status">⭕ 未配置</div>
+            <hr class="divider">
+            <div class="row" style="align-items:center;">
+                <span class="row-label">我的账号<span class="otip" data-tip="推荐在完美弹窗标题栏点「★」把当前资料页设为我（免手填 17 位）；本项会被「导出全部设置」写进 sps-settings.json" tabindex="0" aria-label="说明：推荐在完美弹窗标题栏点「★」把当前资料页设为我（免手填 17 位）；本项会被「导出全部设置」写进 sps-settings.json">ⓘ</span></span>
+                <div class="row-input"><input type="text" id="pw_my_steamid" placeholder="17 位 Steam64 ID（可留空）" maxlength="20"></div>
+            </div>
+            <div class="hint" id="pw-my-steamid-status">未设置</div>
+        </div>
+
+        <div class="card card-accent">
+            <div class="card-title">5E 对战平台 <span class="pill pill-rec">可选</span></div>
+            <div class="chk-row">
+                <input type="checkbox" id="show_5e">
+                <label for="show_5e">启用 5E 查成分</label>
+            </div>
+            <hr class="divider">
+            <div class="row" style="align-items:center;">
+                <span class="row-label">账号登录（可选）<span class="otip" data-tip="登录后凭证自动获取、仅存本地；匿名状态下查询功能已完全可用" tabindex="0" aria-label="说明：登录后凭证自动获取、仅存本地；匿名状态下查询功能已完全可用">ⓘ</span></span>
+                <div class="row-input" style="display:flex;gap:6px;align-items:center;">
+                    <button type="button" class="btn-ghost" id="f5e-login-btn">5E 登录</button>
+                    <button type="button" class="btn-ghost" id="f5e-logout-btn">退出登录</button>
+                </div>
+            </div>
+            <div class="hint" id="f5e-login-status">⭕ 未登录（匿名查询仍可用，登录仅作增强）</div>
+            <hr class="divider">
+            <div class="chk-row">
+                <input type="checkbox" id="f5e_enh">
+                <label for="f5e_enh">登录增强</label><span class="otip" data-tip="登录后自动生效：封禁角标悬停显示类型/原因/起止时间/同场对局与排位限制截止以及历史比赛详情；未登录只显示公开状态" tabindex="0" aria-label="说明：登录后自动生效：封禁角标悬停显示类型/原因/起止时间/同场对局与排位限制截止以及历史比赛详情；未登录只显示公开状态">ⓘ</span>
+            </div>
+            <hr class="divider">
+            <div class="chk-row">
+                <input type="checkbox" id="f5e_search">
+                <label for="f5e_search">启用昵称搜索</label><span class="otip" data-tip="在 5E 弹窗内按昵称搜索玩家" tabindex="0" aria-label="说明：在 5E 弹窗内按昵称搜索玩家">ⓘ</span>
+            </div>
+            <hr class="divider">
+            <div class="chk-row">
+                <input type="checkbox" id="f5e_contact">
+                <label for="f5e_contact">查看 5E 绑定联系信息（掩码）</label><span class="otip" data-tip="开启可获得被查询方的 5E 绑定信息，但已被 5E 进行掩码（如 138****8888），插件不复原明文。" tabindex="0" aria-label="说明：开启可获得被查询方的 5E 绑定信息，但已被 5E 进行掩码（如 138****8888），插件不复原明文。">ⓘ</span>
+            </div>
+            <hr class="divider">
+            <div class="row" style="align-items:center;">
+                <span class="row-label">我的账号<span class="otip" data-tip="推荐在 5E 弹窗标题栏点「★」把当前资料页设为我（免手填 17 位）；本项会被「导出全部设置」写进 sps-settings.json" tabindex="0" aria-label="说明：推荐在 5E 弹窗标题栏点「★」把当前资料页设为我（免手填 17 位）；本项会被「导出全部设置」写进 sps-settings.json">ⓘ</span></span>
+                <div class="row-input"><input type="text" id="my_steamid" placeholder="17 位 Steam64 ID（可留空）" maxlength="20"></div>
+            </div>
+            <div class="hint" id="my-steamid-status">未设置</div>
+        </div>
+
+        <div class="card">
+            <div class="card-title">缓存管理</div>
+            <div class="row">
+                <span class="row-label">数据缓存<span class="otip" data-tip="5E、完美世界及库存估值数据的缓存时间（5分钟~1天），减少重复查询" tabindex="0" aria-label="说明：5E、完美世界及库存估值数据的缓存时间（5分钟~1天），减少重复查询">ⓘ</span></span>
+                <span id="val_cache_ttl" class="val-badge">5分</span>
+                <div class="row-input"><input type="range" id="cache_ttl" min="5" max="1440" step="5" value="5"></div>
+            </div>
+            <hr class="divider">
+            <div class="row">
+                <span class="row-label">面板缓存<span class="otip" data-tip="FACEIT、CSStats 与 Leetify 面板数据的缓存时间（5分钟~1天），拉长可有效降低外部平台配额消耗与请求限流" tabindex="0" aria-label="说明：FACEIT、CSStats 与 Leetify 面板数据的缓存时间（5分钟~1天），拉长可有效降低外部平台配额消耗与请求限流">ⓘ</span></span>
+                <span id="val_panel_cache_ttl" class="val-badge">30分</span>
+                <div class="row-input"><input type="range" id="panel_cache_ttl" min="5" max="1440" step="5" value="30"></div>
+            </div>
+            <hr class="divider">
+            <div class="row">
+                <span class="row-label">中文描述缓存<span class="otip" data-tip="悬浮卡中文描述/标签/箱子内容的缓存时长（30 分钟 ~ 7 天），过期自动清理；「清除缓存」按钮也会立即清掉它" tabindex="0" aria-label="说明：悬浮卡中文描述/标签/箱子内容的缓存时长（30 分钟 ~ 7 天），过期自动清理；「清除缓存」按钮也会立即清掉它">ⓘ</span></span>
+                <span id="val_zh_cache_ttl" class="val-badge">1天</span>
+                <div class="row-input"><input type="range" id="zh_cache_ttl" min="30" max="10080" step="30" value="1440"></div>
+            </div>
+            <hr class="divider">
+            <div class="row" style="align-items:flex-start;">
+                <span class="row-label">分域清除<span class="otip" data-tip="只清对应领域的缓存，不影响其它功能；点「保存设置」会全量清缓存" tabindex="0" aria-label="说明：只清对应领域的缓存，不影响其它功能；点「保存设置」会全量清缓存">ⓘ</span></span>
+                <div class="row-input" style="display:flex;flex-wrap:wrap;gap:6px;">
+                    <button type="button" class="btn-ghost cache-clear-btn" data-domain="INV">库存估值</button>
+                    <button type="button" class="btn-ghost cache-clear-btn" data-domain="FACEIT">FACEIT</button>
+                    <button type="button" class="btn-ghost cache-clear-btn" data-domain="LEETIFY">Leetify</button>
+                    <button type="button" class="btn-ghost cache-clear-btn" data-domain="CSSTATS">CSStats</button>
+                    <button type="button" class="btn-ghost cache-clear-btn" data-domain="PW">完美世界</button>
+                    <button type="button" class="btn-ghost cache-clear-btn" data-domain="F5E">5E 平台</button>
+                    <button type="button" class="btn-ghost cache-clear-btn" data-domain="ZH">中文字典</button>
+                    <button type="button" class="btn-ghost cache-clear-btn" data-domain="PRICES">价格缓存</button>
+                </div>
+            </div>
+            <hr class="divider">
+            <div class="row" style="align-items:flex-start;">
+                <span class="row-label">熔断器状态<span class="otip" data-tip="提供方限流/鉴权失效后的自动短路冷却（20s→45s→90s 爬梯）；冷却期内估值请求被短路以等待限流窗口恢复；清缓存会立即复位全部熔断" tabindex="0" aria-label="说明：提供方限流/鉴权失效后的自动短路冷却（20s→45s→90s 爬梯）；冷却期内估值请求被短路以等待限流窗口恢复；清缓存会立即复位全部熔断">ⓘ</span></span>
+                <div class="row-input" style="display:flex;justify-content:flex-end;">
+                    <button type="button" class="btn-ghost" id="breaker_refresh">刷新</button>
+                </div>
+            </div>
+            <div class="hint" id="breaker_status" style="margin:0;">熔断状态读取中…</div>
+            <hr class="divider">
+            <div class="hint" id="cache_stats" style="margin:0;">缓存占用统计中…</div>
+        </div>
+
+        <button id="save" class="btn-primary">保存设置</button>
+        <div id="status"></div>
+    </div>
+
+    <script src="debug.js"></script>
+    <script src="options/controls.js"></script>
+    <script src="options/tokens.js"></script>
+    <script src="options/csqaq.js"></script>
+    <script src="content/5e_probe.js"></script>
+    <script src="content/pw_probe.js"></script>
+    <script src="options/main.js"></script>
+</body>
+</html>
